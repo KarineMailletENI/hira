@@ -9,26 +9,27 @@ Hira est une application web de planification et de gestion de voyage. Elle perm
 *   **Coffre-fort numérique :** Stockage centralisé des informations et documents essentiels pour le voyage (attestations d'assurance, photocopies de passeport, billets de transport).
 *   **Suivi budgétaire :** Estimation des coûts du séjour et visualisation claire du budget pour simplifier les dépenses et la gestion financière.
 
-## 🛠️ Stack Technique
+## 🏗️ Architecture du Projet
 
-L'application repose sur une architecture découplée (API / Client) :
+L'application repose sur une architecture découplée :
 
-*   **Backend :** Java / Spring Boot
-*   **Frontend :** Vue.js
-*   **Base de données :** *[Ex: PostgreSQL / MySQL - À compléter]*
+* **Backend :** Java 21 / Spring Boot (géré avec Maven)
+* **Frontend :** Vue.js 3 / Vite *(généré prochainement)*
+* **Base de données :** PostgreSQL *(ou MySQL, à choisir...)*
 
 ## 🚀 Installation et Lancement
 
 *(Section à compléter au fur et à mesure du développement)*
 
 ### Prérequis
-*   Java SDK (version X)
-*   Node.js & npm
+* Java 21 ou supérieur
+* Node.js (version LTS recommandée)
+* Un système de gestion de base de données (PostgreSQL/MySQL)
 
 ### Lancement du Backend (Spring Boot)
-```bash
-# Commande pour lancer le serveur Spring Boot
-```
+1. Se déplacer dans le dossier : `cd backend`
+2. L'application se configure via le fichier `src/main/resources/application.properties`.
+3. Lancer le serveur Spring Boot depuis votre IDE (IntelliJ) ou via le wrapper Maven.
 
 ### Lancement du Frontend (Vue.js)
 #### Installer les dépendances

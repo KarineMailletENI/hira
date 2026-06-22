@@ -2,45 +2,76 @@
 
 Hira est une application web de planification et de gestion de voyage. Elle permet aux utilisateurs de centraliser l'organisation de leurs séjours, de la découverte d'activités à la gestion rigoureuse de leur budget, en passant par le stockage sécurisé de leurs documents administratifs.
 
-## ✨ Fonctionnalités principales
+---
 
-*   **Gestion des utilisateurs :** Inscription, connexion et espaces personnels sécurisés pour gérer ses propres voyages.
-*   **Boîte à idées d'activités :** Recherche d'activités touristiques et possibilité d'ajouter manuellement des inspirations dénichées sur les réseaux sociaux (TikTok, Instagram, etc.).
-*   **Coffre-fort numérique :** Stockage centralisé des informations et documents essentiels pour le voyage (attestations d'assurance, photocopies de passeport, billets de transport).
-*   **Suivi budgétaire :** Estimation des coûts du séjour et visualisation claire du budget pour simplifier les dépenses et la gestion financière.
+## Fonctionnalités principales
 
-## 🏗️ Architecture du Projet
+- **Gestion des utilisateurs** : inscription, connexion et espace personnel sécurisé.
+- **Boîte à idées** : recherche d'activités et ajout manuel d'inspirations (TikTok, Instagram, etc.).
+- **Coffre-fort numérique** : stockage des documents essentiels (passeport, billets, assurances).
+- **Suivi budgétaire** : estimation des coûts et visualisation claire des dépenses par catégorie.
 
-L'application repose sur une architecture découplée :
+---
 
-* **Backend :** Java 21 / Spring Boot (géré avec Maven)
-* **Frontend :** Vue.js 3 / Vite *(généré prochainement)*
-* **Base de données :** PostgreSQL *(ou MySQL, à choisir...)*
+## Stack technique
 
-## 🚀 Installation et Lancement
+| Couche      | Technologie                  |
+|-------------|------------------------------|
+| Backend     | Java 21 / Spring Boot / Maven |
+| Frontend    | Vue.js 3 / Vite              |
+| Base de données | PostgreSQL ou MySQL *(à définir)* |
 
-*(Section à compléter au fur et à mesure du développement)*
+---
+
+## Structure du projet
+
+hira/
+
+├── backend/    ← API REST Spring Boot 
+
+└── frontend/   ← Interface Vue.js
+
+---
+
+## Installation et lancement
 
 ### Prérequis
-* Java 21 ou supérieur
-* Node.js (version LTS recommandée)
-* Un système de gestion de base de données (PostgreSQL/MySQL)
 
-### Lancement du Backend (Spring Boot)
-1. Se déplacer dans le dossier : `cd backend`
-2. L'application se configure via le fichier `src/main/resources/application.properties`.
-3. Lancer le serveur Spring Boot depuis votre IDE (IntelliJ) ou via le wrapper Maven.
+- Java 21 ou supérieur
+- Node.js 22 ou supérieur / npm 10 ou supérieur
+- Un SGBD (PostgreSQL ou MySQL)
 
-### Lancement du Frontend (Vue.js)
-#### Installer les dépendances
+### Backend (Spring Boot)
+
+1. Se placer dans le dossier : `cd backend`
+2. Configurer la base de données dans `src/main/resources/application.properties`
+3. Lancer depuis IntelliJ
+
+### Frontend (Vue.js)
+
+1. Se placer dans le dossier : `cd frontend`
+2. Installer les dépendances :
+
 ```bash
 npm install
 ```
 
-#### Lancer le serveur de développement
+3. Lancer le serveur de développement :
+
 ```bash
 npm run dev
 ```
 
-Projet développé dans un cadre d'apprentissage et de développement personnel.
+L'application est accessible sur `http://localhost:5173/`
 
+Autres commandes utiles :
+
+```bash
+npm run build    # Compiler pour la production
+npm run format   # Formater le code (Prettier)
+npm run lint     # Analyser le code (ESLint)
+```
+
+---
+
+Projet développé dans un cadre d'apprentissage et de développement personnel.

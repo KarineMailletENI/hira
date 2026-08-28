@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Cabin:wght@600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  /* Couleurs */
+  --color-expedition-nocturne: #0A4D56;
+  --color-mer-mediterranee: #1499AB;
+  --color-aube-scintillante: #F9B724;
+  --color-brillance: #FFFDFC;
+  --color-blanc-angelique: #F4ECE2;
+  --color-soie-orientale: #EFE5D9;
+
+  /* Typographie */
+  --font-title: 'Cabin', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* Border radius */
+  --radius-card: 20px;
+  --radius-button: 20px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-brillance);
+  color: var(--color-expedition-nocturne);
+}
+h1{
+  font-family: var(--font-title);
+  font-size: 40px;
+  font-weight: 700;
+}
+h2{
+  font-family: var(--font-title);
+  font-size: 28px;
+  font-weight: 700;
+}
+h3{
+  font-family: var(--font-title);
+  font-size: 20px;
+  font-weight: 600;
+}

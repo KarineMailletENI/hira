@@ -6,7 +6,10 @@ import java.util.UUID;
 
 /**
  * This class represents the budget for a specific travel category.
- * For example, the transport budget for a trip to Japan.
+ * A budget have a category, an amount, a description, and a specific travel.
+ * For example : its category is 'ACCOMMODATION' ; its amount is 3500£ ;
+ * its description is 'list of accommodation and specific information about that' ;
+ * its travel is ID_travel.
  */
 @Entity
 public class Budget {
@@ -23,7 +26,7 @@ public class Budget {
     @JoinColumn(name = "travel_id")
     private Travel travel;
 
-    //Constructeurs
+    //Constructors
     public Budget() {
     }
     public Budget(Category category, BigDecimal amount, String description) {

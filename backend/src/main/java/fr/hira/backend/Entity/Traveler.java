@@ -20,7 +20,7 @@ public class Traveler {
     private String lastName;
     private LocalDate dateOfBirth;
     @ManyToOne
-    @JoinColumn(name="travel_id")
+    @JoinColumn(name="id_travel")
     private Travel travel;
 
     //Constructeurs

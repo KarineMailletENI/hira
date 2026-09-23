@@ -10,7 +10,7 @@ import java.util.UUID;
 
 /**
  * Travel is a class representing travel in a specific country
- * for a specific duration and with a list of travelers
+ * for a specific duration and with participations of person
  * and provides budget estimation based on reference prices.
  */
 @Entity
@@ -26,7 +26,7 @@ public class Travel {
     private LocalDate departureDate;
     private LocalDate arrivalDate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "travel")
-    private List<Traveler> travelers;
+    private List<Participation> participations;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "travel")
     private List<Budget> budgets;
 
@@ -34,12 +34,11 @@ public class Travel {
     public Travel() {
     }
 
-    public Travel(String name, Country country, LocalDate departureDate, LocalDate arrivalDate, List<Traveler> travelers) {
+    public Travel(String name, Country country, LocalDate departureDate, LocalDate arrivalDate) {
         this.name = name;
         this.country = country;
         this.departureDate = departureDate;
         this.arrivalDate = arrivalDate;
-        this.travelers = travelers;
     }
 
     //Getter and Setter
@@ -83,12 +82,12 @@ public class Travel {
         this.arrivalDate = arrivalDate;
     }
 
-    public List<Traveler> getTravelers() {
-        return travelers;
+    public List<Participation> getParticipations() {
+        return participations;
     }
 
-    public void setTravelers(List<Traveler> travelers) {
-        this.travelers = travelers;
+    public void setParticipations(List<Participation> participations) {
+        this.participations = participations;
     }
 
     public List<Budget> getBudgets() {
@@ -116,17 +115,17 @@ public class Travel {
      */
     public BigDecimal getEstimation(List<ReferencePrice> referencePrices) {
         BigDecimal estimation = BigDecimal.ZERO;
-        BigDecimal nbTravelers = new BigDecimal(this.travelers.size());
+        BigDecimal nbParticipations = new BigDecimal(this.participations.size());
         BigDecimal nbDays = new BigDecimal(this.getDuration());
         for(ReferencePrice referencePrice : referencePrices) {
             estimation = switch (referencePrice.getCategory()) {
                 case TRANSPORT, EXTRAS-> estimation.add(referencePrice.getUnitPrice()
-                        .multiply(nbTravelers));
+                        .multiply(nbParticipations));
                 case ACCOMMODATION, ACTIVITIES -> estimation.add(referencePrice.getUnitPrice()
-                        .multiply(nbTravelers)
+                        .multiply(nbParticipations)
                         .multiply(nbDays));
                 case FOOD -> estimation.add(referencePrice.getUnitPrice()
-                        .multiply(nbTravelers)
+                        .multiply(nbParticipations)
                         .multiply(nbDays)
                         .multiply(BigDecimal.valueOf(3)));
             };

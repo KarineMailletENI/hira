@@ -1,16 +1,20 @@
 package fr.hira.backend.Entity;
+
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.List;
 import java.util.UUID;
 
 /**
- * This class represents the traveler identity with the lastname, the firstname and the date of birth.
+ * This class represents a person with an identity (firstname, lastname, date of birth).
+ * Moreover, this person has a link with her participations to travel.
  * Provides age calculation based on date of birth.
  */
+
 @Entity
-public class Traveler {
+public class Person {
 
     //Attributs
     @Id
@@ -19,20 +23,22 @@ public class Traveler {
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
-    @ManyToOne
-    @JoinColumn(name="travel_id")
-    private Travel travel;
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
+    private List<Participation> participations;
 
-    //Constructeurs
-    public Traveler() {
+    //Constructors
+
+    public Person() {
     }
-    public Traveler(String firstName, String lastName, LocalDate dateOfBirth) {
+
+    public Person(String firstName, String lastName, LocalDate dateOfBirth) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
     }
 
-    //Getter and Setter
+    //Getters and setters
+
     public UUID getId() {
         return id;
     }
@@ -65,18 +71,20 @@ public class Traveler {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public Travel getTravel() {
-        return travel;
+    public List<Participation> getParticipations() {
+        return participations;
     }
 
-    public void setTravel(Travel travel) {
-        this.travel = travel;
+    public void setParticipations(List<Participation> participations) {
+        this.participations = participations;
     }
 
-    //Méthodes
+
+    //Methods
+
     /**
-     * Method returns the age of traveler.
-     * @return age of traveler
+     * Method returns the age of this person.
+     * @return age of this person
      */
     public int getAge() {
         return Period.between(this.dateOfBirth, LocalDate.now()).getYears();

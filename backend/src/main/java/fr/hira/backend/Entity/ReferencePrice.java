@@ -23,7 +23,7 @@ public class ReferencePrice{
     private BigDecimal unitPrice;
     private String unit;
 
-    //Constructeur
+    //Constructors
     public ReferencePrice() {
     }
     public ReferencePrice(Country country, Category category, BigDecimal unitPrice, String unit) {

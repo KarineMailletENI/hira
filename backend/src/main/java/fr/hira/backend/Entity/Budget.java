@@ -21,6 +21,7 @@ public class Budget {
     @Enumerated(EnumType.STRING)
     private Category category;
     private BigDecimal amount;
+    private Currency currency;
     private String description;
     @ManyToOne
     @JoinColumn(name = "travel_id")
@@ -29,13 +30,14 @@ public class Budget {
     //Constructors
     public Budget() {
     }
-    public Budget(Category category, BigDecimal amount, String description) {
+    public Budget(Category category, BigDecimal amount, Currency currency, String description) {
         this.category = category;
         this.amount = amount;
+        this.currency = currency;
         this.description = description;
     }
 
-    //Getter and Setter
+    //Getters and Setters
     public UUID getId() {
         return id;
     }
@@ -58,6 +60,14 @@ public class Budget {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 
     public String getDescription() {

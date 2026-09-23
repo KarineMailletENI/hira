@@ -5,9 +5,11 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 /**
- * ReferencePrice is a class which references
- * unit prices per category and per country,
- * used to estimate the total cost of travel.
+ * ReferencePrice is a class that represents an item with
+ * an identity, a country of reference, a category
+ * (such as transport, accommodation, etc.), a price,
+ * a currency, and a redundant calculation for a general
+ * budget.
  */
 @Entity
 public class ReferencePrice{
@@ -20,20 +22,25 @@ public class ReferencePrice{
     private Country country;
     @Enumerated(EnumType.STRING)
     private Category category;
-    private BigDecimal unitPrice;
-    private String unit;
+    @Enumerated(EnumType.STRING)
+    private Frequency frequency;
+    private BigDecimal price;
+    @Enumerated(EnumType.STRING)
+    private Currency currency;
 
     //Constructors
     public ReferencePrice() {
     }
-    public ReferencePrice(Country country, Category category, BigDecimal unitPrice, String unit) {
+
+    public ReferencePrice(Country country, Category category, Frequency frequency, BigDecimal price, Currency currency) {
         this.country = country;
         this.category = category;
-        this.unit = unit;
-        this.unitPrice = unitPrice;
+        this.frequency = frequency;
+        this.price = price;
+        this.currency = currency;
     }
+    //Getters / Setters
 
-    //Getter / Setter
 
     public UUID getId() {
         return id;
@@ -59,19 +66,27 @@ public class ReferencePrice{
         this.category = category;
     }
 
-    public BigDecimal getUnitPrice() {
-        return unitPrice;
+    public Frequency getFrequency() {
+        return frequency;
     }
 
-    public void setUnitPrice(BigDecimal unitPrice) {
-        this.unitPrice = unitPrice;
+    public void setFrequency(Frequency frequency) {
+        this.frequency = frequency;
     }
 
-    public String getUnit() {
-        return unit;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setUnit(String unit) {
-        this.unit = unit;
+    public void setPrice(BigDecimal unitPrice) {
+        this.price = unitPrice;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 }

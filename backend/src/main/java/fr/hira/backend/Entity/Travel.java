@@ -30,7 +30,7 @@ public class Travel {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "travel")
     private List<Budget> budgets;
 
-    //Constructeurs
+    //Constructors
     public Travel() {
     }
 
@@ -98,39 +98,60 @@ public class Travel {
         this.budgets = budgets;
     }
 
-    //Méthodes
-
-    /**
-     * getDuration() is a method returning the total number of travel days.
-     * @return total number of travel days
-     */
-    public long getDuration() {
-        return ChronoUnit.DAYS.between(departureDate,arrivalDate);
-    }
+    //Methods
 
     /**
      * This method returns an estimation of the trip budget.
-     * @param referencePrices
+     * @param referencePrices A list of reference prices to establish a budget estimate
      * @return estimation
      */
     public BigDecimal getEstimation(List<ReferencePrice> referencePrices) {
         BigDecimal estimation = BigDecimal.ZERO;
-        BigDecimal nbParticipations = new BigDecimal(this.participations.size());
-        BigDecimal nbDays = new BigDecimal(this.getDuration());
-        for(ReferencePrice referencePrice : referencePrices) {
-            estimation = switch (referencePrice.getCategory()) {
-                case TRANSPORT, EXTRAS-> estimation.add(referencePrice.getUnitPrice()
-                        .multiply(nbParticipations));
-                case ACCOMMODATION, ACTIVITIES -> estimation.add(referencePrice.getUnitPrice()
-                        .multiply(nbParticipations)
-                        .multiply(nbDays));
-                case FOOD -> estimation.add(referencePrice.getUnitPrice()
-                        .multiply(nbParticipations)
-                        .multiply(nbDays)
-                        .multiply(BigDecimal.valueOf(3)));
-            };
+        BigDecimal nbParticipations = new BigDecimal(this.getParticipations().size());
+
+        for (ReferencePrice rf : referencePrices) {
+            estimation = estimation.add(rf.getPrice()
+                                    .multiply(getMultiplierCoefficient(rf.getFrequency())
+                                    .multiply(nbParticipations)));
         }
         return estimation;
+    }
+
+    /**
+     * This method returns the multiplier coefficient in fonction of the frequency.
+     * Example : If the during of your travel is 7 days, and the frequency passed in parameter is PER_HOURS,
+     * the multiplier coefficient will be 168.00 (because 7 * 24 = 128)
+     * @param frequency
+     * @return a multiplier coefficient
+     */
+    public BigDecimal getMultiplierCoefficient(Frequency frequency) {
+        long coefficient;
+
+        switch (frequency) {
+            case Frequency.ONE_TIME:
+                coefficient = 1 ;
+                break;
+            case Frequency.PER_HOUR:
+                coefficient = ChronoUnit.DAYS.between(departureDate, arrivalDate)*24;
+                break;
+            case Frequency.PER_DAY:
+                coefficient = ChronoUnit.DAYS.between(departureDate, arrivalDate);
+                break;
+            case Frequency.PER_WEEK:
+                coefficient = ChronoUnit.WEEKS.between(departureDate, arrivalDate);
+                break;
+            case Frequency.PER_MONTH:
+                coefficient = ChronoUnit.MONTHS.between(departureDate, arrivalDate);
+                break;
+            case Frequency.PER_YEAR:
+                coefficient = ChronoUnit.YEARS.between(departureDate, arrivalDate);
+                break;
+            default: coefficient = 0;
+        }
+
+        if(coefficient == 0) coefficient = 1 ;
+
+        return BigDecimal.valueOf(coefficient);
     }
 
 }

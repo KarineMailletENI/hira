@@ -58,6 +58,17 @@ public class TravelRepositoryTest {
         participations.add(participationBart);
         t.setParticipations(participations);
 
+        Budget budget = new Budget(
+                Category.TRANSPORT,
+                BigDecimal.valueOf(2461.21),
+                Currency.EUR,
+                "billet pour une personne aller-retour Nantes-Tokyo avec une escale max en classe éco");
+        budget.setTravel(t);
+        em.persist(budget);
+        List<Budget> listBudget = new ArrayList<>();
+        listBudget.add(budget);
+        t.setBudgets(listBudget);
+
         em.flush();
         em.clear();
     }
@@ -107,7 +118,7 @@ public class TravelRepositoryTest {
         assertThat(idsResult).containsExactlyInAnyOrderElementsOf(idsExpected);
     }
     @Test
-    void shouldSaveTravel(){
+    void shouldSaveTravelAndCascadeToParticipationsAndBudgets(){
         //Arrange -- setUp()
         Travel expected = new Travel(
                 "L'opéra de Tokyo",
@@ -129,6 +140,13 @@ public class TravelRepositoryTest {
         participationsBc.add(participationBc);
         expected.setParticipations(participationsBc);
 
+        Budget budget = new Budget(Category.EXTRAS, BigDecimal.valueOf(4480), Currency.JPY, "figurine d'Evangelion");
+        UUID idBeforeSaveBudget = budget.getId();
+        List<Budget> listBudget = new ArrayList<>();
+        listBudget.add(budget);
+        budget.setTravel(expected);
+        expected.setBudgets(listBudget);
+
         //Act
         Travel result = travelRepository.save(expected);
 
@@ -141,24 +159,30 @@ public class TravelRepositoryTest {
         assertEquals(expected.getArrivalDate(), result.getArrivalDate());
         //--Verification of Cascade
         assertNull(idBeforeSaveParticipation);
-        assertNotNull(expected.getParticipations().getFirst().getId());
+        for(Participation p : expected.getParticipations()) assertNotNull(p.getId());
+        assertNull(idBeforeSaveBudget);
+        for(Budget b : expected.getBudgets()) assertNotNull(b.getId());
     }
     @Test
-    void shouldDeleteTravelAndCascadeToParticipations(){
+    void shouldDeleteTravelAndCascadeToParticipationsAndBudgets(){
         //Arrange -- setUp()
         List<UUID> idListParticipationBeforeDelete = t.getParticipations()
                                                         .stream()
                                                         .map(Participation::getId)
                                                         .toList();
+        List<UUID> idListBudgetBeforeDelete = t.getBudgets()
+                .stream()
+                .map(Budget::getId)
+                .toList();
         UUID idTravelBeforeDelete = t.getId();
 
         //Act
         travelRepository.delete(t);
 
         //Assert
-        assertEquals(Optional.empty(), travelRepository.findById(idTravelBeforeDelete));
+        assertNull(em.find(Travel.class,idTravelBeforeDelete));
         for(UUID idBeforeDelete : idListParticipationBeforeDelete) assertNull(em.find(Participation.class,idBeforeDelete));
-
+        for(UUID idBeforeDelete : idListBudgetBeforeDelete) assertNull(em.find(Budget.class,idBeforeDelete));
     }
 
     @Test

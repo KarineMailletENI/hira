@@ -25,9 +25,9 @@ public class Travel {
     private Country country;
     private LocalDate departureDate;
     private LocalDate arrivalDate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "travel")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "travel")
     private List<Participation> participations;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "travel")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "travel")
     private List<Budget> budgets;
 
     //Constructors
@@ -121,33 +121,19 @@ public class Travel {
      * This method returns the multiplier coefficient in fonction of the frequency.
      * Example : If the during of your travel is 7 days, and the frequency passed in parameter is PER_HOURS,
      * the multiplier coefficient will be 168.00 (because 7 * 24 = 128)
-     * @param frequency
+     * @param frequency the frequency of Enumtype Frequency
      * @return a multiplier coefficient
      */
     public BigDecimal getMultiplierCoefficient(Frequency frequency) {
-        long coefficient;
-
-        switch (frequency) {
-            case Frequency.ONE_TIME:
-                coefficient = 1 ;
-                break;
-            case Frequency.PER_HOUR:
-                coefficient = ChronoUnit.DAYS.between(departureDate, arrivalDate)*24;
-                break;
-            case Frequency.PER_DAY:
-                coefficient = ChronoUnit.DAYS.between(departureDate, arrivalDate);
-                break;
-            case Frequency.PER_WEEK:
-                coefficient = ChronoUnit.WEEKS.between(departureDate, arrivalDate);
-                break;
-            case Frequency.PER_MONTH:
-                coefficient = ChronoUnit.MONTHS.between(departureDate, arrivalDate);
-                break;
-            case Frequency.PER_YEAR:
-                coefficient = ChronoUnit.YEARS.between(departureDate, arrivalDate);
-                break;
-            default: coefficient = 0;
-        }
+        long coefficient = switch (frequency) {
+            case Frequency.ONE_TIME -> 1;
+            case Frequency.PER_HOUR -> ChronoUnit.DAYS.between(departureDate, arrivalDate) * 24;
+            case Frequency.PER_DAY -> ChronoUnit.DAYS.between(departureDate, arrivalDate);
+            case Frequency.PER_WEEK -> ChronoUnit.WEEKS.between(departureDate, arrivalDate);
+            case Frequency.PER_MONTH -> ChronoUnit.MONTHS.between(departureDate, arrivalDate);
+            case Frequency.PER_YEAR -> ChronoUnit.YEARS.between(departureDate, arrivalDate);
+            default -> 0;
+        };
 
         if(coefficient == 0) coefficient = 1 ;
 

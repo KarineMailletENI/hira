@@ -1,6 +1,7 @@
 package fr.hira.backend.DAL;
 
 import fr.hira.backend.Entity.*;
+import fr.hira.backend.Entity.Currency;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,7 @@ import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -201,5 +199,47 @@ public class TravelRepositoryTest {
         assertEquals(expected.getCountry(), result.getCountry());
         assertEquals(LocalDate.of(2027,3,10), result.getDepartureDate());
         assertEquals(expected.getArrivalDate(), result.getArrivalDate());
+    }
+
+    @Test
+    void shouldUpdateTravelAndRemoveOrpheanParticipation(){
+        //Arrange
+        //La participation de Marge
+        Participation partMarge = t.getParticipations().stream()
+                .filter((participation -> participation.getPerson().getFirstName().equals("Marge")))
+                .findAny().orElseThrow();
+        UUID idPMarge = partMarge.getId();
+        //La participation de Bart
+        Participation partBart = t.getParticipations().stream()
+                .filter((participation -> participation.getPerson().getFirstName().equals("Bart")))
+                .findAny().orElseThrow();
+        UUID idPBart = partBart.getId();
+
+        //Act
+        t.getParticipations().remove(partMarge);
+        travelRepository.save(t);
+        em.flush();
+
+        //Assert
+        assertNull(em.find(Participation.class,idPMarge));
+        assertEquals(Objects.requireNonNull(em.find(Participation.class, idPBart)).getId(),partBart.getId());
+    }
+
+    @Test
+    void shouldUpdateTravelAndRemoveOrpheanBudget(){
+        //Arrange
+        //Le budget
+        Budget budget = t.getBudgets().stream().findFirst().orElseThrow();
+        UUID idBudget = budget.getId();
+
+        //Act
+        t.getBudgets().remove(budget);
+        travelRepository.save(t);
+        em.flush();
+        em.clear();
+
+        //Assert
+        assertNull(em.find(Budget.class,idBudget));
+        assertTrue(Objects.requireNonNull(em.find(Travel.class, t.getId())).getBudgets().isEmpty());
     }
 }
